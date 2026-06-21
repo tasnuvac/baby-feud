@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baby Feud</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body onload="tryAutoplayTheme()">
+  <audio id="intro-audio" src="assets/theme.mp3" loop></audio>
+  <audio id="setup-audio" src="assets/naming teams and choosing.mp3" loop></audio>
+  <audio id="answering-audio" src="assets/answering2.mp3" loop></audio>
+
+  <audio id="correct-audio" src="assets/on the board.mp3"></audio>
+  <audio id="wrong-audio" src="assets/strikes.mp3"></audio>
+  <audio id="duplicate-audio" src="assets/duplicate.mp3"></audio>
+  <audio id="winner-audio" src="assets/when a team wins.mp3"></audio>
+  <audio id="round-loading-audio" src="assets/round loading.mp3" loop></audio>
+  <audio id="timer-audio" src="assets/timer.mp3" loop></audio>
+  <audio id="thanks-audio" src="assets/thank you for playing.mp3"></audio>
+
+  <div id="intro-screen" class="screen active">
+    <div class="intro-card">
+      <h1>Baby Feud</h1>
+      <p>For Imran and Kiran</p>
+      <p class="small-text">It’s a boy!</p>
+      <button type="button" onclick="startIntroMusic()">Start Baby Feud</button>
+    </div>
+  </div>
+
+  <div id="setup-screen" class="screen">
+    <div class="setup-card">
+      <h1>Set Up Teams</h1>
+      <p class="setup-note">Enter your team names:</p>
+
+      <label for="team-name-0">Team 1 Name</label>
+      <input id="team-name-0" class="team-name-input" value="Team " />
+
+      <label for="team-name-1">Team 2 Name</label>
+      <input id="team-name-1" class="team-name-input" value="Team " />
+
+      <button type="button" onclick="startGame()">Begin Game</button>
+    </div>
+  </div>
+
+  <div id="game-screen" class="screen">
+    <div class="game-layout">
+      <aside class="side-panel">
+        <div class="side-logo-box">
+          <h1>Baby<br />Feud</h1>
+        </div>
+
+        <div class="side-small-box">
+          <p id="round-label">Round 1</p>
+        </div>
+
+        <div class="side-small-box">
+          <p id="phase-label">Face-Off</p>
+        </div>
+      </aside>
+
+      <main class="board-area">
+        <section id="scoreboard" class="scoreboard"></section>
+
+        <h2 id="question-text">Question goes here</h2>
+
+        <div id="answer-board" class="answer-board"></div>
+
+        <div class="status-panel">
+          <h2 id="active-team-label">Active Team:</h2>
+          <p id="game-message">Enter an answer below.</p>
+
+          <div id="hint-box" class="hint-box hidden"></div>
+
+          <div id="play-pass-controls" class="play-pass-controls hidden">
+            <button type="button" onclick="choosePlay()">Play</button>
+            <button type="button" onclick="choosePass()">Pass</button>
+          </div>
+
+          <div id="guess-area" class="guess-row">
+            <input
+              type="text"
+              id="guess-input"
+              placeholder="Type team answer here..."
+              onkeydown="handleEnter(event)"
+            />
+            <button type="button" onclick="submitGuess()">Submit Answer</button>
+          </div>
+
+          <div class="strikes">
+            <span id="strike-1" class="strike hidden">X</span>
+            <span id="strike-2" class="strike hidden">X</span>
+            <span id="strike-3" class="strike hidden">X</span>
+          </div>
+        </div>
+
+        <section class="host-controls">
+          <button type="button" onclick="forceRevealAndNext()">Reveal Answers / Next Round</button>
+          <button type="button" onclick="stopAllAudio()">Stop Music</button>
+          <button type="button" onclick="resumeMusic()">Resume Music</button>
+          <button type="button" onclick="resetGame()">Reset Game</button>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="fast-money-intro-screen" class="screen">
+    <div class="setup-card fast-money-intro-card">
+      <h1>Fast Money Round!</h1>
+      <p id="fast-money-intro-message" class="setup-note">
+        The winning team is going into Fast Money.
+      </p>
+
+      <div class="fast-rules">
+        <p>Two players from the winning team will answer the same 5 questions.</p>
+        <p>Each player gets a 5-second countdown, then 2 minutes to answer.</p>
+        <p>Player 2 cannot repeat Player 1’s answers.</p>
+        <p>Reach 200 points to win Fast Money!</p>
+      </div>
+
+      <label id="fast-player-one-label" for="fast-player-one-name">Player 1 Name</label>
+      <input
+        id="fast-player-one-name"
+        class="team-name-input"
+        placeholder="Enter Player 1 name"
+      />
+
+      <label id="fast-player-two-label" for="fast-player-two-name">Player 2 Name</label>
+      <input
+        id="fast-player-two-name"
+        class="team-name-input"
+        placeholder="Enter Player 2 name"
+      />
+
+      <button type="button" onclick="startFastMoneyFromIntro()">Start Fast Money</button>
+    </div>
+  </div>
+
+  <div id="fast-money-screen" class="screen">
+    <div class="fast-money-layout">
+      <header class="game-header fast-side-header">
+        <h1>Fast Money</h1>
+        <p id="fast-team-label">Winning Team</p>
+        <p id="fast-player-label">Player 1</p>
+        <p id="fast-timer">Timer: --</p>
+      </header>
+
+      <main class="board-area fast-board-area">
+        <div id="fast-countdown" class="fast-countdown hidden">5</div>
+
+        <h2 id="fast-question-text">Fast Money question goes here</h2>
+
+        <div id="fast-money-board" class="fast-money-board hidden"></div>
+
+        <div class="status-panel">
+          <p id="fast-message">Get ready for Fast Money!</p>
+
+          <div id="fast-answer-area" class="guess-row hidden">
+            <input
+              type="text"
+              id="fast-answer-input"
+              placeholder="Type Fast Money answer..."
+              onkeydown="handleFastMoneyEnter(event)"
+            />
+            <button type="button" onclick="submitFastMoneyAnswer()">Submit Answer</button>
+          </div>
+
+          <button id="fast-start-button" type="button" onclick="startFastMoneyCountdown()">
+            Start Player
+          </button>
+
+          <button id="fast-end-button" type="button" class="hidden" onclick="showThanksScreen()">
+            End Game
+          </button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="thanks-screen" class="screen">
+    <div class="intro-card">
+      <h1>Thanks for Playing!</h1>
+      <p id="final-winner-message">Baby Feud is over!</p>
+      <div id="game-summary" class="game-summary"></div>
+      <button type="button" onclick="resetGame()">Play Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
