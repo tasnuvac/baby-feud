@@ -26,6 +26,58 @@
       <p>For Imran and Kiran</p>
       <p class="small-text">It’s a boy!</p>
       <button type="button" onclick="startIntroMusic()">Start Baby Feud</button>
+
+      <details class="rules-dropdown">
+        <summary>Rules</summary>
+
+        <div class="rules-menu-content">
+          <section class="rule-section">
+            <h2>Game Setup</h2>
+            <p>Two teams play five regular Baby Feud rounds. Enter both team names, then begin the game.</p>
+            <p>The TV/computer acts as the host screen. The host types the answers, controls the music, pauses the game, and manages overrides.</p>
+          </section>
+
+          <section class="rule-section">
+            <h2>Face-Off Round</h2>
+            <p>Each round begins with a face-off team. Teams do not need to pick their answer person during the loading screen.</p>
+            <p>Once the question appears, the team can discuss quickly and send one person up to the computer to type the answer.</p>
+            <p>If the answer is on the board, that team chooses whether to play the board or pass it to the other team.</p>
+          </section>
+
+          <section class="rule-section">
+            <h2>Play / Pass</h2>
+            <p>If a team chooses Play, they keep guessing answers on the board. If they choose Pass, the other team takes control of the board.</p>
+            <p>As the round is going, the team can choose who comes up to type for each turn. The person typing should enter the team’s final answer.</p>
+            <p>The bank grows as correct answers are found. The controlling team keeps going until they clear the board or get three strikes.</p>
+          </section>
+
+          <section class="rule-section">
+            <h2>Strikes and Steal</h2>
+            <p>A wrong answer gives the controlling team one strike. After three strikes, the other team gets a chance to steal.</p>
+            <p>If the stealing team gives a correct answer, they win the bank. If they miss, the controlling team keeps the bank.</p>
+          </section>
+
+          <section class="rule-section">
+            <h2>Timer, Hints, and Music</h2>
+            <p>Each regular round has a timer. The host can pause and resume the game if needed.</p>
+            <p>Hints appear after two strikes. They are meant to help without giving away the exact answer.</p>
+            <p>At one minute left, the timer audio starts. The answering music lowers slightly while the timer sound plays.</p>
+          </section>
+
+          <section class="rule-section">
+            <h2>Host Override</h2>
+            <p>After answers are revealed, the host can add override points if a team gave an answer that should count.</p>
+            <p>Override points must match one of the answer point values from that round. The host can add multiple overrides, then press Done.</p>
+          </section>
+
+          <section class="rule-section">
+            <h2>Fast Money</h2>
+            <p>Fast Money uses one player from each team. The team with the higher regular-round score goes first.</p>
+            <p>Both teams get time to choose their representative before Fast Money starts.</p>
+            <p>The second team cannot repeat the first team’s Fast Money answers. Fast Money points are added to each team’s score to decide the final winner.</p>
+          </section>
+        </div>
+      </details>
     </div>
   </div>
 
@@ -97,8 +149,11 @@
 
         <section class="host-controls">
           <button type="button" onclick="forceRevealAndNext()">Reveal Answers / Next Round</button>
-          <button type="button" onclick="stopAllAudio()">Stop Music</button>
-          <button type="button" onclick="resumeMusic()">Resume Music</button>
+          <button id="pause-game-button" type="button" onclick="toggleManualPause()">Pause Game</button>
+          <label class="volume-control" for="master-volume">
+            Volume
+            <input id="master-volume" type="range" min="0" max="100" value="100" oninput="setMasterVolume(this.value)" />
+          </label>
           <button type="button" onclick="resetGame()">Reset Game</button>
         </section>
       </main>
@@ -113,20 +168,20 @@
       </p>
 
       <div class="fast-rules">
-        <p>Two players from the winning team will answer the same 5 questions.</p>
-        <p>Each player gets a 5-second countdown, then 2 minutes to answer.</p>
-        <p>Player 2 cannot repeat Player 1’s answers.</p>
-        <p>Reach 200 points to win Fast Money!</p>
+        <p>One chosen player from each team will answer the same 5 questions.</p>
+        <p>Teams get 1 minute to choose their representative before Fast Money starts.</p>
+        <p>The second team cannot repeat the first team’s answers.</p>
+        <p>Fast Money points are added to the regular-round scores to decide the whole game.</p>
       </div>
 
-      <label id="fast-player-one-label" for="fast-player-one-name">Player 1 Name</label>
+      <label id="fast-player-one-label" for="fast-player-one-name">Team 1 Representative Name</label>
       <input
         id="fast-player-one-name"
         class="team-name-input"
         placeholder="Enter Player 1 name"
       />
 
-      <label id="fast-player-two-label" for="fast-player-two-name">Player 2 Name</label>
+      <label id="fast-player-two-label" for="fast-player-two-name">Team 2 Representative Name</label>
       <input
         id="fast-player-two-name"
         class="team-name-input"

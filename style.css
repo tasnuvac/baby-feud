@@ -775,3 +775,243 @@ button:disabled {
 .host-controls.loading-mode button:first-child {
   display: none !important;
 }
+
+/* HOST VOLUME + PAUSE CONTROLS */
+.volume-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  max-width: none;
+  margin: 8px;
+  padding: 10px 14px;
+  background: #fff8d9;
+  color: #073b5c;
+  border: 3px solid #ffd166;
+  border-radius: 14px;
+  box-shadow: 0 5px 0 #b58400;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: none;
+}
+
+.volume-control input {
+  width: 120px;
+  max-width: 120px;
+  padding: 0;
+  border: none;
+}
+
+body.game-paused .guess-row input,
+body.game-paused .guess-row button,
+body.game-paused .play-pass-controls button,
+body.game-paused #fast-start-button {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.pause-message {
+  background: #fff8d9;
+  color: #073b5c;
+  border: 4px solid #ffd166;
+  border-radius: 18px;
+  padding: 12px 18px;
+  margin: 12px auto;
+  max-width: 620px;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 0 5px 0 #073b5c;
+}
+
+/* Make the whole timer box pulse with the timer text */
+.timer-warning-container,
+.timer-danger-container {
+  animation: timerPulse 1s ease-in-out infinite;
+}
+
+.timer-danger-container #phase-label,
+#fast-timer.timer-danger {
+  color: #d85a4f !important;
+  text-shadow: none !important;
+}
+
+.override-controls {
+  background: #fff8d9;
+  color: #073b5c;
+  border: 4px solid #ffd166;
+  border-radius: 18px;
+  padding: 14px;
+  margin: 10px auto;
+  max-width: 720px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 5px 0 #073b5c;
+}
+
+.override-controls p,
+.override-controls li {
+  color: #073b5c;
+  text-shadow: none;
+}
+
+.override-controls select,
+.override-controls input {
+  width: auto;
+  max-width: 220px;
+  margin: 6px;
+}
+
+.override-answer-list {
+  text-align: left;
+  display: inline-block;
+  margin: 8px auto;
+}
+
+/* Host control buttons match the volume control design */
+.host-controls button {
+  background: #fff8d9;
+  color: #073b5c;
+  border: 3px solid #ffd166;
+  border-radius: 14px;
+  box-shadow: 0 5px 0 #b58400;
+  text-shadow: none;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 16px;
+}
+
+.host-controls button:hover {
+  background: #fff1bd;
+}
+
+.host-controls button:disabled {
+  background: #e8e1bd;
+  color: #6a6a6a;
+  box-shadow: 0 5px 0 #a18b48;
+}
+
+.override-add-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px auto;
+}
+
+.override-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px auto;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.override-table th,
+.override-table td {
+  border: 2px solid #ffd166;
+  padding: 8px 10px;
+  color: #073b5c;
+  text-shadow: none;
+}
+
+.override-table th {
+  background: #fff1bd;
+}
+
+.override-mini-note {
+  font-size: 15px;
+  opacity: 0.95;
+  margin-top: 6px;
+}
+
+.override-controls button {
+  background: #fff8d9;
+  color: #073b5c;
+  border: 3px solid #ffd166;
+  border-radius: 14px;
+  box-shadow: 0 5px 0 #b58400;
+  text-shadow: none;
+}
+
+.override-controls button:hover {
+  background: #fff1bd;
+}
+
+
+/* MAIN MENU RULES DROPDOWN */
+.rules-dropdown {
+  margin: 22px auto 0;
+  max-width: 640px;
+  text-align: left;
+}
+
+.rules-dropdown summary {
+  list-style: none;
+  text-align: center;
+  background: #fff8d9;
+  color: #073b5c;
+  border: 4px solid #ffd166;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #b58400;
+  text-shadow: none;
+}
+
+.rules-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.rules-dropdown summary::after {
+  content: " ▼";
+  color: #8a43ff;
+}
+
+.rules-dropdown[open] summary::after {
+  content: " ▲";
+}
+
+.rules-menu-content {
+  margin-top: 16px;
+  max-height: 390px;
+  overflow-y: auto;
+  background: rgba(255, 248, 217, 0.97);
+  color: #073b5c;
+  border: 4px solid #ffd166;
+  border-radius: 20px;
+  padding: 18px 22px;
+  box-shadow: 0 6px 0 #073b5c;
+}
+
+.rule-section {
+  border-bottom: 2px dashed rgba(20, 93, 160, 0.35);
+  padding: 12px 0;
+}
+
+.rule-section:first-child {
+  padding-top: 0;
+}
+
+.rule-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rule-section h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #145da0;
+  text-shadow: none;
+}
+
+.rule-section p {
+  margin: 6px 0;
+  font-size: 17px;
+  line-height: 1.35;
+  color: #073b5c;
+  text-shadow: none;
+}
