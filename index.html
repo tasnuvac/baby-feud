@@ -25,7 +25,12 @@
       <h1>Baby Feud</h1>
       <p>For Imran and Kiran</p>
       <p class="small-text">It’s a boy!</p>
-      <button type="button" onclick="startIntroMusic()">Start Baby Feud</button>
+      <button type="button" class="menu-action-button" onclick="startIntroMusic()">Start Baby Feud</button>
+
+      <label class="volume-control intro-volume-control" for="intro-master-volume">
+        Volume
+        <input id="intro-master-volume" type="range" min="0" max="100" value="100" oninput="setMasterVolume(this.value)" />
+      </label>
 
       <details class="rules-dropdown">
         <summary>Rules</summary>
@@ -169,26 +174,12 @@
 
       <div class="fast-rules">
         <p>One chosen player from each team will answer the same 5 questions.</p>
-        <p>Teams get 1 minute to choose their representative before Fast Money starts.</p>
+        <p>After the rules, both teams get 1 minute to choose their representative.</p>
         <p>The second team cannot repeat the first team’s answers.</p>
         <p>Fast Money points are added to the regular-round scores to decide the whole game.</p>
       </div>
 
-      <label id="fast-player-one-label" for="fast-player-one-name">Team 1 Representative Name</label>
-      <input
-        id="fast-player-one-name"
-        class="team-name-input"
-        placeholder="Enter Player 1 name"
-      />
-
-      <label id="fast-player-two-label" for="fast-player-two-name">Team 2 Representative Name</label>
-      <input
-        id="fast-player-two-name"
-        class="team-name-input"
-        placeholder="Enter Player 2 name"
-      />
-
-      <button type="button" onclick="startFastMoneyFromIntro()">Start Fast Money</button>
+      <button type="button" onclick="startFastMoneyFromIntro()">Continue</button>
     </div>
   </div>
 

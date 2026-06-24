@@ -773,6 +773,16 @@ let manualPauseState = null;
 let fastMoneyTeamOrder = [0, 1];
 let fastMoneyTeamTotals = [0, 0];
 let fastMoneyScoresAdded = false;
+let roundPrepIntervalId = null;
+let roundPrepTimeLeft = 0;
+let fastMoneyTeamPrepIntervalId = null;
+let fastMoneyTeamPrepTimeLeft = 0;
+let fastMoneyStartCountdownIntervalId = null;
+let fastMoneyStartCountdownLeft = 0;
+let revealIntervalId = null;
+let revealOverrideTimeoutId = null;
+let pendingRevealIndexes = [];
+let pendingRevealPosition = 0;
 
 function getScaledVolume(baseVolume) {
   return Math.max(0, Math.min(1, baseVolume * masterVolume));
@@ -794,10 +804,9 @@ function setMasterVolume(value) {
   const numericValue = Number(value);
   masterVolume = Number.isFinite(numericValue) ? Math.max(0, Math.min(1, numericValue / 100)) : 1;
 
-  const volumeInput = document.getElementById("master-volume");
-  if (volumeInput) {
+  document.querySelectorAll('input[type="range"][oninput*="setMasterVolume"]').forEach((volumeInput) => {
     volumeInput.value = Math.round(masterVolume * 100);
-  }
+  });
 
   const timerAudio = document.getElementById(audioTracks.timer);
   const answeringAudio = document.getElementById(audioTracks.answering);
@@ -1033,7 +1042,9 @@ function startGame() {
 
 function startRoundPrepCountdown(seconds = 10) {
   clearRoundTimer();
+  clearRoundPrepCountdown();
   phase = "round-prep";
+  roundPrepTimeLeft = seconds;
   setHostControlsLoadingMode(true);
 
   const statusPanel = document.querySelector("#game-screen .status-panel");
@@ -1047,8 +1058,6 @@ function startRoundPrepCountdown(seconds = 10) {
   updateStrikes();
 
   const roundNumber = currentQuestionIndex + 1;
-  const isFirstRound = roundNumber === 1;
-  const teamGoingFirstName = teams[currentQuestionIndex % 2]?.name || "the next team";
   const phaseLabel = document.getElementById("phase-label");
 
   document.getElementById("round-label").textContent = `Round ${roundNumber}`;
@@ -1064,33 +1073,54 @@ function startRoundPrepCountdown(seconds = 10) {
     loop: true
   });
 
-  let count = seconds;
+  updateRoundPrepText();
+  roundPrepIntervalId = setInterval(tickRoundPrepCountdown, 1000);
+}
 
-  const updatePrepText = () => {
-    const prepMessage = isFirstRound
-      ? `Round 1 starts in ${count} seconds. ${teamGoingFirstName} goes first. Once the question appears, discuss as a team and send someone up to type answers.`
-      : `Next round in ${count} seconds. ${teamGoingFirstName} goes first. Once the question appears, discuss as a team and send someone up to type answers.`;
+function clearRoundPrepCountdown() {
+  if (roundPrepIntervalId) {
+    clearInterval(roundPrepIntervalId);
+    roundPrepIntervalId = null;
+  }
+}
 
-    document.getElementById("active-team-label").textContent = prepMessage;
-    document.getElementById("game-message").textContent = "";
-  };
+function updateRoundPrepText() {
+  const roundNumber = currentQuestionIndex + 1;
+  const isFirstRound = roundNumber === 1;
+  const teamGoingFirstName = teams[currentQuestionIndex % 2]?.name || "the next team";
+  const prepMessage = isFirstRound
+    ? `Round 1 starts in ${roundPrepTimeLeft} seconds. ${teamGoingFirstName} goes first. Once the question appears, discuss as a team and send someone up to type answers.`
+    : `Next round in ${roundPrepTimeLeft} seconds. ${teamGoingFirstName} goes first. Once the question appears, discuss as a team and send someone up to type answers.`;
 
-  updatePrepText();
+  document.getElementById("active-team-label").textContent = prepMessage;
+  document.getElementById("game-message").textContent = "";
+}
 
-  const prepInterval = setInterval(() => {
-    count--;
+function tickRoundPrepCountdown() {
+  roundPrepTimeLeft--;
 
-    if (count > 0) {
-      updatePrepText();
-    } else {
-      clearInterval(prepInterval);
-      fadeToBackgroundAudio(audioTracks.answering, {
-        restart: true,
-        loop: true
-      });
-      loadRound();
-    }
-  }, 1000);
+  if (roundPrepTimeLeft > 0) {
+    updateRoundPrepText();
+  } else {
+    clearRoundPrepCountdown();
+    fadeToBackgroundAudio(audioTracks.answering, {
+      restart: true,
+      loop: true
+    });
+    loadRound();
+  }
+}
+
+function resumeRoundPrepCountdown() {
+  phase = "round-prep";
+  setHostControlsLoadingMode(true);
+  fadeToBackgroundAudio(audioTracks.roundLoading, {
+    restart: false,
+    loop: true
+  });
+  updateRoundPrepText();
+  clearRoundPrepCountdown();
+  roundPrepIntervalId = setInterval(tickRoundPrepCountdown, 1000);
 }
 
 function loadRound() {
@@ -1745,8 +1775,68 @@ function awardRoundToTeam(teamIndex, message) {
   }, 2200);
 }
 
+function clearRevealTimers() {
+  if (revealIntervalId) {
+    clearInterval(revealIntervalId);
+    revealIntervalId = null;
+  }
+
+  if (revealOverrideTimeoutId) {
+    clearTimeout(revealOverrideTimeoutId);
+    revealOverrideTimeoutId = null;
+  }
+}
+
+function scheduleOverrideDecision(delay = 1200) {
+  if (revealOverrideTimeoutId) {
+    clearTimeout(revealOverrideTimeoutId);
+  }
+
+  revealOverrideTimeoutId = setTimeout(() => {
+    revealOverrideTimeoutId = null;
+    showOverrideDecision();
+  }, delay);
+}
+
+function startRemainingRevealInterval() {
+  if (revealIntervalId) {
+    clearInterval(revealIntervalId);
+  }
+
+  revealIntervalId = setInterval(() => {
+    if (phase !== "revealing") {
+      return;
+    }
+
+    const answerIndex = pendingRevealIndexes[pendingRevealPosition];
+
+    if (answerIndex === undefined) {
+      clearRevealTimers();
+      scheduleOverrideDecision(1200);
+      return;
+    }
+
+    if (!autoRevealedAnswers.includes(answerIndex)) {
+      autoRevealedAnswers.push(answerIndex);
+    }
+
+    if (!revealedAnswers.includes(answerIndex)) {
+      revealedAnswers.push(answerIndex);
+    }
+
+    renderAnswerBoard();
+    pendingRevealPosition++;
+
+    if (pendingRevealPosition >= pendingRevealIndexes.length) {
+      clearRevealTimers();
+      scheduleOverrideDecision(1200);
+    }
+  }, 1200);
+}
+
 function revealRemainingAnswersThenContinue() {
   clearRoundTimer();
+  clearRevealTimers();
   setHostControlsLoadingMode(true);
 
   phase = "revealing";
@@ -1767,37 +1857,22 @@ function revealRemainingAnswersThenContinue() {
   document.getElementById("game-message").textContent = "";
 
   const currentAnswers = questions[currentQuestionIndex].answers;
-  const hiddenIndexes = [];
+  pendingRevealIndexes = [];
+  pendingRevealPosition = 0;
 
   currentAnswers.forEach((answer, index) => {
     if (!revealedAnswers.includes(index)) {
-      hiddenIndexes.push(index);
+      pendingRevealIndexes.push(index);
     }
   });
 
-  if (hiddenIndexes.length === 0) {
-    setTimeout(showOverrideDecision, 1000);
+  if (pendingRevealIndexes.length === 0) {
+    scheduleOverrideDecision(1000);
     return;
   }
 
-  let revealPosition = 0;
-
-  const revealInterval = setInterval(() => {
-    const answerIndex = hiddenIndexes[revealPosition];
-
-    autoRevealedAnswers.push(answerIndex);
-    revealedAnswers.push(answerIndex);
-    renderAnswerBoard();
-
-    revealPosition++;
-
-    if (revealPosition >= hiddenIndexes.length) {
-      clearInterval(revealInterval);
-      setTimeout(showOverrideDecision, 1200);
-    }
-  }, 1200);
+  startRemainingRevealInterval();
 }
-
 
 function showOverrideDecision() {
   if (overrideAlreadyHandled || phase === "game-over") {
@@ -2077,18 +2152,7 @@ function showFastMoneyScreen() {
   const secondTeamName = teams[fastMoneyTeamOrder[1]].name;
 
   document.getElementById("fast-money-intro-message").textContent =
-    `Fast Money is for both teams! ${firstTeamName} goes first because they are currently ahead.`;
-
-  document.getElementById("fast-player-one-label").textContent =
-    `${firstTeamName}, enter your chosen player's name`;
-
-  document.getElementById("fast-player-two-label").textContent =
-    `${secondTeamName}, enter your chosen player's name`;
-
-  document.getElementById("fast-player-one-name").placeholder = `${firstTeamName} representative`;
-  document.getElementById("fast-player-two-name").placeholder = `${secondTeamName} representative`;
-  document.getElementById("fast-player-one-name").value = "";
-  document.getElementById("fast-player-two-name").value = "";
+    `Fast Money is for both teams! ${firstTeamName} goes first because they are currently ahead. Read the rules, then press Continue to start the 1-minute representative discussion countdown.`;
 }
 
 function startFastMoneyFromIntro() {
@@ -2097,13 +2161,7 @@ function startFastMoneyFromIntro() {
   const firstTeamName = teams[fastMoneyTeamOrder[0]].name;
   const secondTeamName = teams[fastMoneyTeamOrder[1]].name;
 
-  const playerOneName =
-    document.getElementById("fast-player-one-name").value.trim() || `${firstTeamName} Player`;
-
-  const playerTwoName =
-    document.getElementById("fast-player-two-name").value.trim() || `${secondTeamName} Player`;
-
-  fastMoneyPlayerNames = [playerOneName, playerTwoName];
+  fastMoneyPlayerNames = [`${firstTeamName} Representative`, `${secondTeamName} Representative`];
   fastMoneyPlayer = 1;
   fastMoneyTeamIndex = fastMoneyTeamOrder[0];
 
@@ -2114,7 +2172,7 @@ function startFastMoneyFromIntro() {
     `${firstTeamName} goes first`;
 
   document.getElementById("fast-player-label").textContent =
-    `${playerOneName} representing ${firstTeamName}`;
+    `${firstTeamName} representative`;
 
   document.getElementById("fast-timer").textContent = "Timer: 2:00";
   document.getElementById("fast-start-button").classList.add("hidden");
@@ -2127,15 +2185,13 @@ function startFastMoneyFromIntro() {
 
 function startFastMoneyTeamPrepCountdown(seconds = 60) {
   phase = "fast-money-countdown";
+  clearFastMoneyTeamPrepCountdown();
+  fastMoneyTeamPrepTimeLeft = seconds;
 
   fadeToBackgroundAudio(audioTracks.roundLoading, {
     restart: true,
     loop: true
   });
-
-  let countdown = seconds;
-  const firstTeamName = teams[fastMoneyTeamOrder[0]].name;
-  const secondTeamName = teams[fastMoneyTeamOrder[1]].name;
 
   document.getElementById("fast-money-screen").classList.add("fast-countdown-mode");
   document.getElementById("fast-countdown").classList.remove("hidden");
@@ -2145,25 +2201,48 @@ function startFastMoneyTeamPrepCountdown(seconds = 60) {
   document.getElementById("fast-message").textContent =
     "Pick one representative from each team. No teammates can help once their player starts answering.";
 
-  const updatePrep = () => {
-    document.getElementById("fast-countdown").textContent = countdown;
-    document.getElementById("fast-question-text").textContent =
-      `Both teams have ${countdown} seconds to choose their Fast Money player. ${firstTeamName} answers first, then ${secondTeamName}.`;
-  };
+  updateFastMoneyTeamPrepText();
+  fastMoneyTeamPrepIntervalId = setInterval(tickFastMoneyTeamPrepCountdown, 1000);
+}
 
-  updatePrep();
+function clearFastMoneyTeamPrepCountdown() {
+  if (fastMoneyTeamPrepIntervalId) {
+    clearInterval(fastMoneyTeamPrepIntervalId);
+    fastMoneyTeamPrepIntervalId = null;
+  }
+}
 
-  const prepId = setInterval(() => {
-    countdown--;
-    if (countdown > 0) {
-      updatePrep();
-    } else {
-      clearInterval(prepId);
-      document.getElementById("fast-countdown").classList.add("hidden");
-      document.getElementById("fast-money-screen").classList.remove("fast-countdown-mode");
-      startFastMoneyCountdown();
-    }
-  }, 1000);
+function updateFastMoneyTeamPrepText() {
+  const firstTeamName = teams[fastMoneyTeamOrder[0]].name;
+  const secondTeamName = teams[fastMoneyTeamOrder[1]].name;
+
+  document.getElementById("fast-countdown").textContent = fastMoneyTeamPrepTimeLeft;
+  document.getElementById("fast-question-text").textContent =
+    `Both teams have ${fastMoneyTeamPrepTimeLeft} seconds to choose their Fast Money representative. ${firstTeamName} answers first, then ${secondTeamName}.`;
+}
+
+function tickFastMoneyTeamPrepCountdown() {
+  fastMoneyTeamPrepTimeLeft--;
+
+  if (fastMoneyTeamPrepTimeLeft > 0) {
+    updateFastMoneyTeamPrepText();
+  } else {
+    clearFastMoneyTeamPrepCountdown();
+    document.getElementById("fast-countdown").classList.add("hidden");
+    document.getElementById("fast-money-screen").classList.remove("fast-countdown-mode");
+    startFastMoneyCountdown();
+  }
+}
+
+function resumeFastMoneyTeamPrepCountdown() {
+  phase = "fast-money-countdown";
+  fadeToBackgroundAudio(audioTracks.roundLoading, {
+    restart: false,
+    loop: true
+  });
+  updateFastMoneyTeamPrepText();
+  clearFastMoneyTeamPrepCountdown();
+  fastMoneyTeamPrepIntervalId = setInterval(tickFastMoneyTeamPrepCountdown, 1000);
 }
 
 function startFastMoneyCountdown() {
@@ -2175,9 +2254,7 @@ function startFastMoneyCountdown() {
   });
 
   fastMoneyTeamIndex = getFastMoneyTeamIndexForPlayer();
-  const playerName = fastMoneyPlayerNames[fastMoneyPlayer - 1];
   const teamName = teams[fastMoneyTeamIndex].name;
-  const waitingTeamName = teams[getOtherTeamIndex(fastMoneyTeamIndex)].name;
 
   document.getElementById("fast-money-screen").classList.add("fast-countdown-mode");
 
@@ -2186,33 +2263,54 @@ function startFastMoneyCountdown() {
   document.getElementById("fast-money-board").classList.add("hidden");
   document.getElementById("fast-message").textContent =
     fastMoneyPlayer === 1
-      ? `${waitingTeamName}, look away while ${teamName} answers.`
-      : `${waitingTeamName}, your turn is done. ${teamName} is now answering with no duplicate answers.`;
+      ? `${teamName}, answer all 5 Fast Money questions before time runs out.`
+      : `${teamName}, answer now. No duplicate answers from the first team.`;
 
   document.getElementById("fast-team-label").textContent = `${teamName} answering`;
-  document.getElementById("fast-player-label").textContent =
-    `${playerName} representing ${teamName}`;
+  document.getElementById("fast-player-label").textContent = `${teamName} representative`;
 
-  let countdown = 5;
+  fastMoneyStartCountdownLeft = 5;
   const countdownElement = document.getElementById("fast-countdown");
-  countdownElement.textContent = countdown;
+  countdownElement.textContent = fastMoneyStartCountdownLeft;
   countdownElement.classList.remove("hidden");
 
   document.getElementById("fast-question-text").textContent =
-    `${playerName}, get ready! The timer starts after the countdown.`;
+    `${teamName}, get ready! The timer starts after the countdown.`;
 
-  const countdownId = setInterval(() => {
-    countdown--;
+  clearFastMoneyStartCountdown();
+  fastMoneyStartCountdownIntervalId = setInterval(tickFastMoneyStartCountdown, 1000);
+}
 
-    if (countdown > 0) {
-      countdownElement.textContent = countdown;
-    } else {
-      clearInterval(countdownId);
-      countdownElement.classList.add("hidden");
-      document.getElementById("fast-money-screen").classList.remove("fast-countdown-mode");
-      beginFastMoneyPlayer();
-    }
-  }, 1000);
+function clearFastMoneyStartCountdown() {
+  if (fastMoneyStartCountdownIntervalId) {
+    clearInterval(fastMoneyStartCountdownIntervalId);
+    fastMoneyStartCountdownIntervalId = null;
+  }
+}
+
+function tickFastMoneyStartCountdown() {
+  fastMoneyStartCountdownLeft--;
+  const countdownElement = document.getElementById("fast-countdown");
+
+  if (fastMoneyStartCountdownLeft > 0) {
+    countdownElement.textContent = fastMoneyStartCountdownLeft;
+  } else {
+    clearFastMoneyStartCountdown();
+    countdownElement.classList.add("hidden");
+    document.getElementById("fast-money-screen").classList.remove("fast-countdown-mode");
+    beginFastMoneyPlayer();
+  }
+}
+
+function resumeFastMoneyStartCountdown() {
+  phase = "fast-money-countdown";
+  fadeToBackgroundAudio(audioTracks.roundLoading, {
+    restart: false,
+    loop: true
+  });
+  document.getElementById("fast-countdown").textContent = fastMoneyStartCountdownLeft;
+  clearFastMoneyStartCountdown();
+  fastMoneyStartCountdownIntervalId = setInterval(tickFastMoneyStartCountdown, 1000);
 }
 
 function beginFastMoneyPlayer() {
@@ -2349,7 +2447,6 @@ function submitFastMoneyAnswer() {
 }
 
 function showFastMoneyTransitionCountdown() {
-  const playerName = fastMoneyPlayerNames[fastMoneyPlayer - 1];
   const teamName = teams[getFastMoneyTeamIndexForPlayer()].name;
   const goingToSecondPlayer = fastMoneyPlayer === 1;
 
@@ -2374,27 +2471,24 @@ function showFastMoneyTransitionCountdown() {
   document.getElementById("fast-money-board").classList.add("hidden");
   document.getElementById("fast-message").textContent = "";
 
-  if (goingToSecondPlayer) {
-    const secondTeamName = teams[fastMoneyTeamOrder[1]].name;
-    document.getElementById("fast-question-text").textContent =
-      `Great job, ${playerName} from ${teamName}! ${secondTeamName}, get ready. Next team starts in ${countdown}...`;
-  } else {
-    document.getElementById("fast-question-text").textContent =
-      `Great job, ${playerName} from ${teamName}! Continuing to final results in ${countdown}...`;
-  }
+  const updateText = () => {
+    if (goingToSecondPlayer) {
+      const secondTeamName = teams[fastMoneyTeamOrder[1]].name;
+      document.getElementById("fast-question-text").textContent =
+        `Great job, ${teamName}! ${secondTeamName}, get ready. Next team starts in ${countdown}...`;
+    } else {
+      document.getElementById("fast-question-text").textContent =
+        `Great job, ${teamName}! Continuing to final results in ${countdown}...`;
+    }
+  };
+
+  updateText();
 
   const transitionId = setInterval(() => {
     countdown--;
 
     if (countdown > 0) {
-      if (goingToSecondPlayer) {
-        const secondTeamName = teams[fastMoneyTeamOrder[1]].name;
-        document.getElementById("fast-question-text").textContent =
-          `Great job, ${playerName} from ${teamName}! ${secondTeamName}, get ready. Next team starts in ${countdown}...`;
-      } else {
-        document.getElementById("fast-question-text").textContent =
-          `Great job, ${playerName} from ${teamName}! Continuing to final results in ${countdown}...`;
-      }
+      updateText();
     } else {
       clearInterval(transitionId);
       document.getElementById("fast-money-screen").classList.remove("fast-countdown-mode");
@@ -2447,20 +2541,18 @@ function endCurrentFastMoneyPlayer() {
     fastMoneyQuestionIndex = 0;
     fastMoneyTeamIndex = getFastMoneyTeamIndexForPlayer();
 
-    const playerTwoName = fastMoneyPlayerNames[1];
     const teamName = teams[fastMoneyTeamIndex].name;
 
     document.getElementById("fast-team-label").textContent = `${teamName} answering next`;
-    document.getElementById("fast-player-label").textContent =
-      `${playerTwoName} representing ${teamName}`;
+    document.getElementById("fast-player-label").textContent = `${teamName} representative`;
 
     document.getElementById("fast-timer").textContent = "Timer: 2:00";
 
     document.getElementById("fast-question-text").textContent =
-      `${teamName}, get ready. ${playerTwoName} cannot repeat the first team's answers!`;
+      `${teamName}, get ready. Your representative cannot repeat the first team's answers!`;
 
     document.getElementById("fast-message").textContent =
-      `${teams[fastMoneyTeamOrder[0]].name}, look away while ${teamName} answers.`;
+      "Press Start Fast Money Round when the next representative is ready.";
 
     document.getElementById("fast-start-button").textContent = "Start Fast Money Round";
     document.getElementById("fast-start-button").classList.remove("hidden");
@@ -2576,12 +2668,10 @@ function renderFastMoneyBoard(showEverything = false) {
 
 function updateFastMoneyLabels() {
   fastMoneyTeamIndex = getFastMoneyTeamIndexForPlayer();
-  const playerName = fastMoneyPlayerNames[fastMoneyPlayer - 1];
   const teamName = teams[fastMoneyTeamIndex].name;
 
   document.getElementById("fast-team-label").textContent = `${teamName} answering`;
-  document.getElementById("fast-player-label").textContent =
-    `${playerName} representing ${teamName}`;
+  document.getElementById("fast-player-label").textContent = `${teamName} representative`;
 }
 
 function clearFastMoneyInput() {
@@ -2796,9 +2886,21 @@ function handleEnter(event) {
 
 function canPauseCurrentGameState() {
   return (
-    isActiveRoundTimerPhase() ||
-    phase === "fast-money-active"
+    phase !== "intro" &&
+    phase !== "setup" &&
+    phase !== "game-over" &&
+    phase !== "fast-money-complete"
   );
+}
+
+function getPauseType() {
+  if (phase === "revealing") return "revealing";
+  if (phase === "round-prep") return "round-prep";
+  if (phase === "fast-money-countdown" && fastMoneyTeamPrepIntervalId) return "fast-money-team-prep";
+  if (phase === "fast-money-countdown" && fastMoneyStartCountdownIntervalId) return "fast-money-start-countdown";
+  if (phase === "fast-money-active") return "fast-money-active";
+  if (isActiveRoundTimerPhase()) return "regular-timer";
+  return "generic";
 }
 
 function toggleManualPause() {
@@ -2811,22 +2913,15 @@ function toggleManualPause() {
 
 function pauseGameManually() {
   if (!canPauseCurrentGameState()) {
-    const gameMessage = document.getElementById("game-message");
-    const fastMessage = document.getElementById("fast-message");
-    const message = "The timer can only be paused during active answer time.";
-
-    if (phase.startsWith("fast-money") && fastMessage) {
-      fastMessage.textContent = message;
-    } else if (gameMessage) {
-      gameMessage.textContent = message;
-    }
-
     return;
   }
 
+  const pauseType = getPauseType();
+
   manualPauseState = {
     phaseBeforePause: phase,
-    wasFastMoney: phase === "fast-money-active"
+    pauseType,
+    wasFastMoney: phase.startsWith("fast-money")
   };
 
   if (roundTimerId) {
@@ -2837,6 +2932,22 @@ function pauseGameManually() {
   if (fastMoneyTimerId) {
     clearInterval(fastMoneyTimerId);
     fastMoneyTimerId = null;
+  }
+
+  if (pauseType === "round-prep") {
+    clearRoundPrepCountdown();
+  }
+
+  if (pauseType === "fast-money-team-prep") {
+    clearFastMoneyTeamPrepCountdown();
+  }
+
+  if (pauseType === "fast-money-start-countdown") {
+    clearFastMoneyStartCountdown();
+  }
+
+  if (pauseType === "revealing") {
+    clearRevealTimers();
   }
 
   stopTimerWarningAudio(false);
@@ -2850,12 +2961,16 @@ function pauseGameManually() {
   if (manualPauseState.wasFastMoney) {
     document.getElementById("fast-message").innerHTML =
       '<div class="pause-message">Game paused.</div>';
-    document.getElementById("fast-timer").textContent =
-      `Paused: ${Math.floor(fastMoneyTimeLeft / 60)}:${fastMoneyTimeLeft % 60 < 10 ? "0" : ""}${fastMoneyTimeLeft % 60}`;
+    if (pauseType === "fast-money-active") {
+      document.getElementById("fast-timer").textContent =
+        `Paused: ${Math.floor(fastMoneyTimeLeft / 60)}:${fastMoneyTimeLeft % 60 < 10 ? "0" : ""}${fastMoneyTimeLeft % 60}`;
+    }
   } else {
     document.getElementById("game-message").innerHTML =
       '<div class="pause-message">Game paused.</div>';
-    updateRoundTimerDisplay();
+    if (pauseType === "regular-timer") {
+      updateRoundTimerDisplay();
+    }
   }
 
   phase = "paused";
@@ -2882,19 +2997,46 @@ function resumeFromManualPause() {
     pauseButton.textContent = "Pause Game";
   }
 
-  fadeToBackgroundAudio(audioTracks.answering, {
-    restart: false,
-    loop: true
-  });
+  if (pausedState.pauseType === "round-prep") {
+    resumeRoundPrepCountdown();
+    return;
+  }
 
-  if (pausedState.wasFastMoney) {
+  if (pausedState.pauseType === "fast-money-team-prep") {
+    document.getElementById("fast-message").textContent =
+      "Pick one representative from each team. No teammates can help once their player starts answering.";
+    resumeFastMoneyTeamPrepCountdown();
+    return;
+  }
+
+  if (pausedState.pauseType === "fast-money-start-countdown") {
+    document.getElementById("fast-message").textContent = "";
+    resumeFastMoneyStartCountdown();
+    return;
+  }
+
+  if (pausedState.pauseType === "fast-money-active") {
+    fadeToBackgroundAudio(audioTracks.answering, {
+      restart: false,
+      loop: true
+    });
     document.getElementById("fast-message").textContent = "";
     startFastMoneyTimer();
     showCurrentFastMoneyQuestion();
-  } else {
+    return;
+  }
+
+  if (pausedState.pauseType === "regular-timer") {
+    fadeToBackgroundAudio(audioTracks.answering, {
+      restart: false,
+      loop: true
+    });
     document.getElementById("game-message").textContent = "Game resumed.";
     startRoundTimer();
+    return;
   }
+
+  document.getElementById("game-message").textContent = "Game resumed.";
 }
 
 function resumeMusic() {
@@ -2935,6 +3077,7 @@ function resetGame() {
   stopAllAudio();
   clearFastMoneyTimer();
   clearRoundTimer();
+  clearRevealTimers();
   teams = [];
   activeTeamIndex = 0;
   controllingTeamIndex = 0;
