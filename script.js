@@ -1,5 +1,11 @@
 const QUESTION_BANK = [
   {
+    question: "Name a popular nursery rhyme",
+    answers: [
+      { text: "Humpty Dumpty", points: 33, hint: "A wall makes this one famous.", accepted: ["humpty dumpty", "humpty"] }
+    ]
+  },
+  {
     question: "Name something new parents miss most about their pre-baby lives",
     answers: [
       { text: "Sleep", points: 59, hint: "The household jackpot after dark.", accepted: ["sleep", "rest", "naps", "nap", "sleeping", "resting"] },
@@ -28,15 +34,15 @@ const QUESTION_BANK = [
       { text: "1st Word", points: 19, hint: "A sound everyone tries to claim.", accepted: ["1st word", "first word", "first words", "talking"] },
       { text: "Birthdays", points: 11, hint: "Candles keep count here.", accepted: ["birthdays", "birthday"] },
       { text: "1st Smile", points: 5, hint: "A little face finally gives back.", accepted: ["1st smile", "first smile", "smile"] },
-      { text: "Birth", points: 5, hint: "The very first arrival.", accepted: ["birth", "being born", "delivery"] },
+      { text: "Birth", points: 5, hint: "The very first arrival.", accepted: ["birth", "being born", "delivery", "their birth"] },
       { text: "Wedding", points: 3, hint: "A far-future aisle moment.", accepted: ["wedding", "marriage"] }
     ]
   },
   {
     question: "Name something people do to entertain a baby",
     answers: [
-      { text: "Sing", points: 29, hint: "A voice turns into entertainment.", accepted: ["sing", "singing", "song", "songs"] },
-      { text: "Funny Faces", points: 28, hint: "Comedy without words.", accepted: ["funny faces", "make faces", "faces"] },
+      { text: "Sing", points: 29, hint: "A voice turns into entertainment.", accepted: ["sing", "singing", "song", "songs", "lullaby"] },
+      { text: "Funny Faces", points: 28, hint: "Comedy without words.", accepted: ["funny faces", "make faces", "faces", "silly faces", "silly face"] },
       { text: "Peekaboo", points: 21, hint: "A quick disappearing act.", accepted: ["peekaboo", "peek a boo", "peek-a-boo"] },
       { text: "Dance", points: 6, hint: "Tiny laughs from big moves.", accepted: ["dance", "dancing"] },
       { text: "Baby Talk", points: 5, hint: "Nonsense with confidence.", accepted: ["baby talk", "talk", "talking"] },
@@ -123,10 +129,10 @@ const QUESTION_BANK = [
   {
     question: "If you could go back to being a baby for a day, what would you enjoy the most?",
     answers: [
-      { text: "Big Naps", points: 49, hint: "A calendar event with pillows.", accepted: ["big naps", "naps", "nap", "sleep"] },
+      { text: "Big Naps", points: 49, hint: "A calendar event with pillows.", accepted: ["big naps", "naps", "nap", "sleep", "sleeping"] },
       { text: "Snuggles", points: 14, hint: "Cozy arms do the work.", accepted: ["snuggles", "cuddles", "cuddle"] },
       { text: "Being Carried", points: 10, hint: "Transportation by grown-up.", accepted: ["being carried", "carried", "held"] },
-      { text: "No Responsibilities", points: 9, hint: "No bills, no inbox, no schedule.", accepted: ["no responsibilities", "no responsibility", "nothing to do"] },
+      { text: "No Responsibilities", points: 9, hint: "No bills, no inbox, no schedule.", accepted: ["no responsibilities", "no responsibility", "nothing to do", "doing nothing"] },
       { text: "Being Catered To", points: 2, hint: "Everyone becomes staff for a day.", accepted: ["being catered to", "catered to", "taken care of"] },
       { text: "Playtime", points: 2, hint: "The serious business of toys.", accepted: ["playtime", "play", "playing"] }
     ]
@@ -338,6 +344,458 @@ const QUESTION_BANK = [
       { text: "Clap", points: 10, hint: "Tiny hands applaud.", accepted: ["clap", "clapping"] },
       { text: "Wave", points: 9, hint: "A small hello or goodbye.", accepted: ["wave", "waving"] },
       { text: "Sneeze", points: 7, hint: "A tiny achoo.", accepted: ["sneeze", "sneezing"] }
+    ]
+  }
+,
+{
+    question: "Name something a parent would do to help a baby fall asleep",
+    answers: [
+      {
+        text: "Rock The Baby",
+        points: 38,
+        hint: "A tiny back-and-forth mission.",
+        accepted: ["rock the baby", "rock", "rocking", "rock them", "rock baby", "rocking the baby", "sway", "swaying"]
+      },
+      {
+        text: "Give A Bottle",
+        points: 24,
+        hint: "A warm hand-held solution.",
+        accepted: ["give a bottle", "bottle", "milk", "feed", "feeding", "feed baby", "give milk", "baby bottle"]
+      },
+      {
+        text: "Swaddle The Baby",
+        points: 16,
+        hint: "A cozy little wrap job.",
+        accepted: ["swaddle", "swaddle the baby", "wrap", "wrap the baby", "blanket wrap", "bundle", "bundle up"]
+      },
+      {
+        text: "Give A Pacifier",
+        points: 11,
+        hint: "Small, soothing, and easy to misplace.",
+        accepted: ["pacifier", "give a pacifier", "binky", "dummy", "paci", "soother"]
+      },
+      {
+        text: "Sing A Lullaby",
+        points: 7,
+        hint: "A quiet performance for one tiny audience.",
+        accepted: ["sing", "sing a lullaby", "lullaby", "song", "singing", "music", "nursery rhyme"]
+      },
+      {
+        text: "Car Ride",
+        points: 4,
+        hint: "The sleepy route may have no destination.",
+        accepted: ["car ride", "drive", "driving", "ride in car", "car", "take a drive", "drive around"]
+      }
+    ]
+  },
+{
+    question: "Name something that makes a baby more fussy",
+    answers: [
+      {
+        text: "Wet Diaper",
+        points: 34,
+        hint: "A tiny wardrobe problem underneath.",
+        accepted: ["wet diaper", "dirty diaper", "diaper", "needs diaper", "change diaper", "poopy diaper", "pee diaper"]
+      },
+      {
+        text: "Hungry",
+        points: 30,
+        hint: "The tiny stomach starts making demands.",
+        accepted: ["hungry", "hunger", "hangry", "needs food", "food", "milk", "wants milk", "feeding time"]
+      },
+      {
+        text: "Gas",
+        points: 16,
+        hint: "A belly issue with sound effects.",
+        accepted: ["gas", "gassy", "farts", "fart", "burp", "needs burping", "stomach ache", "tummy ache"]
+      },
+      {
+        text: "Too Hot / Too Cold",
+        points: 10,
+        hint: "The room temperature is being judged.",
+        accepted: ["too hot", "too cold", "hot", "cold", "temperature", "overheated", "chilly", "uncomfortable temperature"]
+      },
+      {
+        text: "Tired",
+        points: 6,
+        hint: "Sleep is needed but not accepted.",
+        accepted: ["tired", "sleepy", "needs sleep", "nap", "overtired", "exhausted"]
+      },
+      {
+        text: "Loud Noises",
+        points: 4,
+        hint: "Too much sound enters the chat.",
+        accepted: ["loud noises", "noise", "noises", "loud sound", "sounds", "yelling", "screaming", "vacuum"]
+      }
+    ]
+  },
+{
+    question: "Name a classic baby lullaby",
+    answers: [
+      {
+        text: "Rock-A-Bye Baby",
+        points: 34,
+        hint: "A cradle shows up in the lyrics.",
+        accepted: ["rock a bye baby", "rock-a-bye baby", "rockabye baby", "rock bye baby"]
+      },
+      {
+        text: "Twinkle Twinkle Little Star",
+        points: 28,
+        hint: "The sky gets musical.",
+        accepted: ["twinkle twinkle little star", "twinkle twinkle", "little star", "twinkle"]
+      },
+      {
+        text: "You Are My Sunshine",
+        points: 18,
+        hint: "Weather becomes a compliment.",
+        accepted: ["you are my sunshine", "my sunshine", "sunshine", "youre my sunshine", "you're my sunshine"]
+      },
+      {
+        text: "Hush Little Baby",
+        points: 10,
+        hint: "Quiet comes with promises.",
+        accepted: ["hush little baby", "hush baby", "hush"]
+      },
+      {
+        text: "Itsy Bitsy Spider",
+        points: 6,
+        hint: "A small climber meets the rain.",
+        accepted: ["itsy bitsy spider", "itsy spider", "bitsy spider", "eensy weensy spider", "incy wincy spider"]
+      },
+      {
+        text: "Baby Mine",
+        points: 4,
+        hint: "A gentle song from an elephant story.",
+        accepted: ["baby mine", "dumbo song", "dumbo"]
+      }
+    ]
+  },
+{
+    question: "Name the most popular diaper brand",
+    answers: [
+      {
+        text: "Huggies",
+        points: 36,
+        hint: "The name sounds like a cuddle.",
+        accepted: ["huggies", "huggie"]
+      },
+      {
+        text: "Pampers",
+        points: 32,
+        hint: "The brand name sounds extra cared for.",
+        accepted: ["pampers", "pamper"]
+      },
+      {
+        text: "Honest Co.",
+        points: 14,
+        hint: "The name sounds very trustworthy.",
+        accepted: ["honest", "honest co", "honest company", "the honest company"]
+      },
+      {
+        text: "Luvs",
+        points: 8,
+        hint: "A short name with extra love.",
+        accepted: ["luvs", "loves", "luv"]
+      },
+      {
+        text: "Hello Bello",
+        points: 6,
+        hint: "A cheerful greeting meets a rhyme.",
+        accepted: ["hello bello", "bello"]
+      },
+      {
+        text: "Kirkland",
+        points: 4,
+        hint: "A warehouse favorite.",
+        accepted: ["kirkland", "costco", "costco diapers"]
+      }
+    ]
+  },
+{
+    question: "Name something a baby spends a lot of time doing",
+    answers: [
+      {
+        text: "Sleeping",
+        points: 38,
+        hint: "The tiny schedule has many breaks.",
+        accepted: ["sleeping", "sleep", "nap", "napping", "naps", "resting"]
+      },
+      {
+        text: "Eating",
+        points: 27,
+        hint: "Tiny meals happen again and again.",
+        accepted: ["eating", "eat", "feeding", "drinking milk", "milk", "formula", "nursing", "bottle"]
+      },
+      {
+        text: "Peeing / Pooping",
+        points: 15,
+        hint: "The diaper department stays busy.",
+        accepted: ["peeing", "pooping", "pee", "poop", "bathroom", "dirty diaper", "diaper"]
+      },
+      {
+        text: "Crying",
+        points: 10,
+        hint: "Communication arrives loudly.",
+        accepted: ["crying", "cry", "screaming", "fussing", "fussy"]
+      },
+      {
+        text: "Playing",
+        points: 6,
+        hint: "The serious business of toys.",
+        accepted: ["playing", "play", "playtime", "toys", "playing with toys"]
+      },
+      {
+        text: "Spitting Up",
+        points: 4,
+        hint: "Milk makes an unexpected return.",
+        accepted: ["spitting up", "spit up", "spit", "vomit", "throw up", "puke", "drool"]
+      }
+    ]
+  },
+{
+    question: "Name one thing moms wish dads would help with more",
+    answers: [
+      {
+        text: "Diaper Changing",
+        points: 34,
+        hint: "A task with tabs and wipes.",
+        accepted: ["diaper changing", "diapers", "diaper change", "change diapers", "changing diapers", "change diaper"]
+      },
+      {
+        text: "Nighttime Feedings",
+        points: 26,
+        hint: "A job that happens when the house is dark.",
+        accepted: ["nighttime feedings", "night feeding", "feedings", "feeding", "night duty", "midnight feeding", "late night feeding"]
+      },
+      {
+        text: "House Cleaning",
+        points: 18,
+        hint: "The house quietly asks for help.",
+        accepted: ["house cleaning", "cleaning", "clean", "chores", "housework", "laundry", "dishes"]
+      },
+      {
+        text: "Bath Time",
+        points: 10,
+        hint: "Water, towels, and tiny splashes.",
+        accepted: ["bath time", "bath", "bathing", "wash baby", "baby bath"]
+      },
+      {
+        text: "Cooking",
+        points: 7,
+        hint: "Dinner still has to happen.",
+        accepted: ["cooking", "cook", "meals", "dinner", "make food", "meal prep"]
+      },
+      {
+        text: "Everything",
+        points: 5,
+        hint: "A broad answer with a tired tone.",
+        accepted: ["everything", "all of it", "anything", "help more", "more help", "all chores"]
+      }
+    ]
+  },
+{
+    question: "What's the most common nickname for grandma",
+    answers: [
+      {
+        text: "Nana",
+        points: 35,
+        hint: "A sweet two-syllable classic.",
+        accepted: ["nana", "nanna", "na na"]
+      },
+      {
+        text: "Grandma / Gramma",
+        points: 28,
+        hint: "The standard title with a cozy sound.",
+        accepted: ["grandma", "gramma", "grandmother", "grand mama", "grandmama"]
+      },
+      {
+        text: "Gigi",
+        points: 16,
+        hint: "Two matching letters do the work.",
+        accepted: ["gigi", "gee gee", "gg"]
+      },
+      {
+        text: "Granny",
+        points: 10,
+        hint: "An old-school storybook title.",
+        accepted: ["granny", "grannie"]
+      },
+      {
+        text: "Mimi",
+        points: 7,
+        hint: "A name that repeats itself softly.",
+        accepted: ["mimi", "mee mee"]
+      },
+      {
+        text: "Lola",
+        points: 4,
+        hint: "A short name heard in many families.",
+        accepted: ["lola"]
+      }
+    ]
+  },
+{
+    question: "Name the softest thing in a baby's room",
+    answers: [
+      {
+        text: "Blanket",
+        points: 34,
+        hint: "A cozy square that follows the baby around.",
+        accepted: ["blanket", "blankie", "baby blanket", "security blanket"]
+      },
+      {
+        text: "Plush Toy",
+        points: 24,
+        hint: "A stuffed friend with no real job.",
+        accepted: ["plush toy", "stuffed animal", "plush", "teddy bear", "stuffie", "soft toy"]
+      },
+      {
+        text: "Baby's Skin",
+        points: 18,
+        hint: "The answer is attached to the tiny person.",
+        accepted: ["baby skin", "babys skin", "skin", "baby's skin"]
+      },
+      {
+        text: "Pillow",
+        points: 11,
+        hint: "A sleepy rectangle.",
+        accepted: ["pillow", "pillows"]
+      },
+      {
+        text: "Crib Sheet",
+        points: 8,
+        hint: "The mattress gets dressed with it.",
+        accepted: ["crib sheet", "sheet", "sheets", "bed sheet", "baby sheet"]
+      },
+      {
+        text: "Rug",
+        points: 5,
+        hint: "The floor gets a softer outfit.",
+        accepted: ["rug", "carpet", "mat", "floor mat"]
+      }
+    ]
+  },
+{
+    question: "Name the best tasting baby food",
+    answers: [
+      {
+        text: "Bananas",
+        points: 36,
+        hint: "A yellow mushy favorite.",
+        accepted: ["bananas", "banana"]
+      },
+      {
+        text: "Peaches",
+        points: 24,
+        hint: "A soft fruit with summer energy.",
+        accepted: ["peaches", "peach"]
+      },
+      {
+        text: "Apples",
+        points: 18,
+        hint: "A lunchbox fruit in spoon form.",
+        accepted: ["apples", "apple", "applesauce", "apple sauce"]
+      },
+      {
+        text: "Pears",
+        points: 12,
+        hint: "A gentle fruit shaped like a little bell.",
+        accepted: ["pears", "pear"]
+      },
+      {
+        text: "Sweet Potatoes",
+        points: 7,
+        hint: "Orange, soft, and dinner-like.",
+        accepted: ["sweet potatoes", "sweet potato", "yams", "yam"]
+      },
+      {
+        text: "Carrots",
+        points: 3,
+        hint: "A bunny-approved orange option.",
+        accepted: ["carrots", "carrot"]
+      }
+    ]
+  },
+{
+    question: "Name something you find in a diaper bag besides diapers",
+    answers: [
+      {
+        text: "Wipes",
+        points: 36,
+        hint: "Cleanup cannot start without it.",
+        accepted: ["wipes", "baby wipes", "wet wipes", "wipe"]
+      },
+      {
+        text: "Bottle",
+        points: 25,
+        hint: "A meal packed in your hand.",
+        accepted: ["bottle", "baby bottle", "milk bottle", "formula bottle"]
+      },
+      {
+        text: "Pacifier",
+        points: 16,
+        hint: "Small, soothing, and always missing.",
+        accepted: ["pacifier", "binky", "paci", "dummy", "soother"]
+      },
+      {
+        text: "Change Of Clothes",
+        points: 11,
+        hint: "The backup outfit saves the day.",
+        accepted: ["change of clothes", "extra clothes", "clothes", "outfit", "extra outfit", "onesie"]
+      },
+      {
+        text: "Snacks",
+        points: 7,
+        hint: "Tiny hunger insurance.",
+        accepted: ["snacks", "snack", "food", "puffs", "baby snacks"]
+      },
+      {
+        text: "Toys",
+        points: 5,
+        hint: "A distraction with bright colors.",
+        accepted: ["toys", "toy", "rattle", "teether"]
+      }
+    ]
+  },
+{
+    question: "Name a common baby shower gift",
+    answers: [
+      {
+        text: "Diapers",
+        points: 38,
+        hint: "The practical gift that disappears fast.",
+        accepted: ["diapers", "diaper"]
+      },
+      {
+        text: "Clothes",
+        points: 25,
+        hint: "Tiny outfits for tiny people.",
+        accepted: ["clothes", "baby clothes", "outfits", "outfit", "onesies", "onesie"]
+      },
+      {
+        text: "Blankets",
+        points: 15,
+        hint: "Soft squares people love to wrap.",
+        accepted: ["blankets", "blanket", "baby blanket", "swaddle", "swaddles"]
+      },
+      {
+        text: "Toys",
+        points: 10,
+        hint: "The fun option with packaging.",
+        accepted: ["toys", "toy", "rattle", "teether", "plush"]
+      },
+      {
+        text: "Books",
+        points: 7,
+        hint: "Pages before the baby can read.",
+        accepted: ["books", "book", "baby books", "story books", "storybook"]
+      },
+      {
+        text: "Gift Card",
+        points: 5,
+        hint: "A present that lets parents decide.",
+        accepted: ["gift card", "money", "cash", "card", "store card"]
+      }
     ]
   }
 ];
@@ -701,6 +1159,127 @@ const FAST_MONEY_BANK = [
       { text: "Knives", points: 5, hint: "Kitchen tools with sharp edges.", accepted: ["knives", "knife"] }
     ]
   }
+,
+{
+    question: "Name something a parent would do to help a baby fall asleep.",
+    answers: [
+      { text: "Rock The Baby", points: 38, accepted: ["rock the baby", "rock", "rocking", "rock them", "sway", "swaying"] },
+      { text: "Give A Bottle", points: 24, accepted: ["give a bottle", "bottle", "milk", "feed", "feeding", "baby bottle"] },
+      { text: "Swaddle The Baby", points: 16, accepted: ["swaddle", "swaddle the baby", "wrap", "bundle"] },
+      { text: "Give A Pacifier", points: 12, accepted: ["pacifier", "binky", "paci", "dummy", "soother"] },
+      { text: "Car Ride", points: 10, accepted: ["car ride", "drive", "driving", "ride in car", "take a drive"] }
+    ]
+  },
+{
+    question: "Name something that makes a baby more fussy.",
+    answers: [
+      { text: "Wet Diaper", points: 34, accepted: ["wet diaper", "dirty diaper", "diaper", "change diaper", "poopy diaper"] },
+      { text: "Hungry", points: 30, accepted: ["hungry", "hangry", "hunger", "needs food", "milk"] },
+      { text: "Gas", points: 18, accepted: ["gas", "gassy", "farts", "fart", "burp", "tummy ache"] },
+      { text: "Too Hot / Too Cold", points: 10, accepted: ["too hot", "too cold", "hot", "cold", "temperature"] },
+      { text: "Loud Noises", points: 8, accepted: ["loud noises", "noise", "noises", "loud sound", "vacuum"] }
+    ]
+  },
+{
+    question: "Name a classic baby lullaby.",
+    answers: [
+      { text: "Rock-A-Bye Baby", points: 34, accepted: ["rock a bye baby", "rock-a-bye baby", "rockabye baby"] },
+      { text: "Twinkle Twinkle Little Star", points: 28, accepted: ["twinkle twinkle little star", "twinkle twinkle", "little star"] },
+      { text: "You Are My Sunshine", points: 18, accepted: ["you are my sunshine", "my sunshine", "sunshine", "you're my sunshine", "youre my sunshine"] },
+      { text: "Hush Little Baby", points: 12, accepted: ["hush little baby", "hush baby", "hush"] },
+      { text: "Itsy Bitsy Spider", points: 8, accepted: ["itsy bitsy spider", "itsy spider", "eensy weensy spider"] }
+    ]
+  },
+{
+    question: "Name the most popular diaper brand.",
+    answers: [
+      { text: "Huggies", points: 36, accepted: ["huggies", "huggie"] },
+      { text: "Pampers", points: 32, accepted: ["pampers", "pamper"] },
+      { text: "Honest Co.", points: 14, accepted: ["honest", "honest co", "honest company", "the honest company"] },
+      { text: "Luvs", points: 10, accepted: ["luvs", "luv", "loves"] },
+      { text: "Hello Bello", points: 8, accepted: ["hello bello", "bello"] }
+    ]
+  },
+{
+    question: "Name something a baby spends a lot of time doing.",
+    answers: [
+      { text: "Sleeping", points: 38, accepted: ["sleeping", "sleep", "nap", "napping", "naps"] },
+      { text: "Eating", points: 27, accepted: ["eating", "eat", "feeding", "milk", "formula", "bottle"] },
+      { text: "Peeing / Pooping", points: 16, accepted: ["peeing", "pooping", "pee", "poop", "diaper"] },
+      { text: "Crying", points: 12, accepted: ["crying", "cry", "screaming", "fussing"] },
+      { text: "Spitting Up", points: 7, accepted: ["spitting up", "spit up", "vomit", "throw up", "puke"] }
+    ]
+  },
+{
+    question: "Name one thing moms wish dads would help with more.",
+    answers: [
+      { text: "Diaper Changing", points: 34, accepted: ["diaper changing", "diapers", "diaper change", "change diapers"] },
+      { text: "Nighttime Feedings", points: 26, accepted: ["nighttime feedings", "night feeding", "feeding", "night duty"] },
+      { text: "House Cleaning", points: 18, accepted: ["house cleaning", "cleaning", "chores", "housework", "laundry"] },
+      { text: "Bath Time", points: 12, accepted: ["bath time", "bath", "bathing", "baby bath"] },
+      { text: "Everything", points: 10, accepted: ["everything", "all of it", "anything", "help more", "more help"] }
+    ]
+  },
+{
+    question: "What's the most common nickname for grandma?",
+    answers: [
+      { text: "Nana", points: 35, accepted: ["nana", "nanna", "na na"] },
+      { text: "Grandma / Gramma", points: 28, accepted: ["grandma", "gramma", "grandmother", "grandmama"] },
+      { text: "Gigi", points: 16, accepted: ["gigi", "gee gee", "gg"] },
+      { text: "Granny", points: 12, accepted: ["granny", "grannie"] },
+      { text: "Lola", points: 9, accepted: ["lola"] }
+    ]
+  },
+{
+    question: "Name the softest thing in a baby's room.",
+    answers: [
+      { text: "Blanket", points: 34, accepted: ["blanket", "blankie", "baby blanket"] },
+      { text: "Plush Toy", points: 24, accepted: ["plush toy", "stuffed animal", "plush", "teddy bear"] },
+      { text: "Baby's Skin", points: 18, accepted: ["baby skin", "babys skin", "skin", "baby's skin"] },
+      { text: "Pillow", points: 14, accepted: ["pillow", "pillows"] },
+      { text: "Crib Sheet", points: 10, accepted: ["crib sheet", "sheet", "sheets", "baby sheet"] }
+    ]
+  },
+{
+    question: "Name the best tasting baby food.",
+    answers: [
+      { text: "Bananas", points: 36, accepted: ["bananas", "banana"] },
+      { text: "Peaches", points: 24, accepted: ["peaches", "peach"] },
+      { text: "Apples", points: 18, accepted: ["apples", "apple", "applesauce", "apple sauce"] },
+      { text: "Pears", points: 12, accepted: ["pears", "pear"] },
+      { text: "Carrots", points: 10, accepted: ["carrots", "carrot"] }
+    ]
+  },
+{
+    question: "Name something you find in a diaper bag besides diapers.",
+    answers: [
+      { text: "Wipes", points: 36, accepted: ["wipes", "baby wipes", "wet wipes", "wipe"] },
+      { text: "Bottle", points: 25, accepted: ["bottle", "baby bottle", "milk bottle", "formula bottle"] },
+      { text: "Pacifier", points: 16, accepted: ["pacifier", "binky", "paci", "dummy", "soother"] },
+      { text: "Change Of Clothes", points: 13, accepted: ["change of clothes", "extra clothes", "clothes", "outfit", "onesie"] },
+      { text: "Toys", points: 10, accepted: ["toys", "toy", "rattle", "teether"] }
+    ]
+  },
+{
+    question: "Name a common baby shower gift.",
+    answers: [
+      { text: "Diapers", points: 38, accepted: ["diapers", "diaper"] },
+      { text: "Clothes", points: 25, accepted: ["clothes", "baby clothes", "outfits", "onesies", "onesie"] },
+      { text: "Blankets", points: 15, accepted: ["blankets", "blanket", "baby blanket", "swaddle"] },
+      { text: "Toys", points: 12, accepted: ["toys", "toy", "rattle", "teether", "plush"] },
+      { text: "Books", points: 10, accepted: ["books", "book", "baby books", "story books"] }
+    ]
+  },
+{
+    question: "Name a baby's first word.",
+    answers: [
+      { text: "Mama", points: 35, accepted: ["mama", "mom", "mommy", "ma", "mother"] },
+      { text: "Dada", points: 30, accepted: ["dada", "dad", "daddy", "da", "father"] },
+      { text: "Hi", points: 15, accepted: ["hi", "hello", "hey"] },
+      { text: "No", points: 12, accepted: ["no", "nope"] },
+      { text: "Baba", points: 8, accepted: ["baba", "ba ba", "bottle"] }
+    ]
+  }
 ];
 
 let fastMoneyQuestions = [];
@@ -831,8 +1410,17 @@ function getFastMoneyTeamIndexForPlayer(playerNumber = fastMoneyPlayer) {
 
 const RECENT_REGULAR_QUESTIONS_KEY = "babyFeudRecentRegularQuestions";
 const RECENT_FAST_MONEY_QUESTIONS_KEY = "babyFeudRecentFastMoneyQuestions";
-const RECENT_REGULAR_LIMIT = 15;
-const RECENT_FAST_MONEY_LIMIT = 15;
+
+// Question randomization notes:
+// - Each bank is shuffled independently and evenly.
+// - The game remembers recently used questions in localStorage so back-to-back playthroughs
+//   are much less likely to repeat questions.
+// - Newer questions are NOT permanently favored. Once they have been used, they go into
+//   the same recent-history rotation as every other question.
+// - The selector first picks randomly from questions that have not been used recently.
+//   If it needs more, it backfills from the oldest-used questions before touching newer-used ones.
+// - Fast Money still only pulls from FAST_MONEY_BANK, and it also avoids any question prompt
+//   that appeared in the five regular rounds for that playthrough.
 
 function getQuestionId(questionItem) {
   return normalizeAnswer(questionItem.question || "");
@@ -840,7 +1428,8 @@ function getQuestionId(questionItem) {
 
 function getRecentQuestionIds(storageKey) {
   try {
-    return JSON.parse(localStorage.getItem(storageKey)) || [];
+    const storedIds = JSON.parse(localStorage.getItem(storageKey)) || [];
+    return Array.isArray(storedIds) ? storedIds : [];
   } catch (error) {
     return [];
   }
@@ -855,34 +1444,111 @@ function saveRecentQuestionIds(storageKey, ids, limit) {
 }
 
 function shuffleItems(items) {
-  return [...items].sort(() => Math.random() - 0.5);
-}
+  const shuffled = [...items];
 
-function getRandomQuestionsAvoidingRecent(bank, amount, storageKey, recentLimit) {
-  const recentIds = getRecentQuestionIds(storageKey);
-  const recentSet = new Set(recentIds);
-  const freshQuestions = bank.filter((item) => !recentSet.has(getQuestionId(item)));
-
-  let selected = [];
-
-  if (freshQuestions.length >= amount) {
-    selected = shuffleItems(freshQuestions).slice(0, amount);
-  } else {
-    const selectedIds = new Set(freshQuestions.map(getQuestionId));
-    const backfillQuestions = bank.filter((item) => !selectedIds.has(getQuestionId(item)));
-    selected = [
-      ...shuffleItems(freshQuestions),
-      ...shuffleItems(backfillQuestions)
-    ].slice(0, amount);
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
+  return shuffled;
+}
+
+function getUniqueQuestionBank(bank) {
+  const seenIds = new Set();
+
+  return bank.filter((item) => {
+    const id = getQuestionId(item);
+
+    if (!id || seenIds.has(id)) {
+      return false;
+    }
+
+    seenIds.add(id);
+    return true;
+  });
+}
+
+function getDynamicRecentLimit(bankSize, amount) {
+  // Remember almost the whole bank, but always leave enough room to pick a full round.
+  // This gives "new questions every playthrough" until the bank has been mostly exhausted.
+  return Math.max(0, bankSize - amount);
+}
+
+function getQuestionsById(bank) {
+  return new Map(bank.map((item) => [getQuestionId(item), item]));
+}
+
+function pickRandomQuestionsByRecentHistory(candidates, amount, recentIds) {
+  const candidateMap = getQuestionsById(candidates);
+  const recentSet = new Set(recentIds);
+  const selected = [];
+  const selectedIds = new Set();
+
+  // First choice: questions that have not been used recently.
+  // This pool is fully shuffled so the choice still feels random.
+  const freshQuestions = shuffleItems(
+    candidates.filter((item) => !recentSet.has(getQuestionId(item)))
+  );
+
+  for (const question of freshQuestions) {
+    if (selected.length >= amount) break;
+
+    const id = getQuestionId(question);
+    selected.push(question);
+    selectedIds.add(id);
+  }
+
+  if (selected.length >= amount) {
+    return selected;
+  }
+
+  // If the fresh pool is too small, backfill from the oldest-used questions first.
+  // recentIds is stored newest -> oldest, so reverse it before backfilling.
+  const oldestRecentlyUsed = recentIds
+    .slice()
+    .reverse()
+    .filter((id) => candidateMap.has(id) && !selectedIds.has(id));
+
+  for (const id of oldestRecentlyUsed) {
+    if (selected.length >= amount) break;
+
+    selected.push(candidateMap.get(id));
+    selectedIds.add(id);
+  }
+
+  // Final fallback in case the bank is very small or all candidates were excluded.
+  if (selected.length < amount) {
+    const fallbackQuestions = shuffleItems(
+      candidates.filter((item) => !selectedIds.has(getQuestionId(item)))
+    );
+
+    selected.push(...fallbackQuestions.slice(0, amount - selected.length));
+  }
+
+  return selected;
+}
+
+function getRandomQuestionsAvoidingRecent(bank, amount, storageKey, options = {}) {
+  const excludedIds = new Set(options.excludeIds || []);
+  const uniqueBank = getUniqueQuestionBank(bank).filter((item) => !excludedIds.has(getQuestionId(item)));
+
+  if (uniqueBank.length <= amount) {
+    const selected = shuffleItems(uniqueBank).slice(0, amount);
+    saveRecentQuestionIds(storageKey, selected.map(getQuestionId), getDynamicRecentLimit(uniqueBank.length, amount));
+    return selected;
+  }
+
+  const recentIds = getRecentQuestionIds(storageKey).filter((id) => uniqueBank.some((item) => getQuestionId(item) === id));
+
+  const selected = pickRandomQuestionsByRecentHistory(uniqueBank, amount, recentIds);
   const selectedIds = selected.map(getQuestionId);
   const updatedRecentIds = [
     ...selectedIds,
     ...recentIds.filter((id) => !selectedIds.includes(id))
   ];
 
-  saveRecentQuestionIds(storageKey, updatedRecentIds, recentLimit);
+  saveRecentQuestionIds(storageKey, updatedRecentIds, getDynamicRecentLimit(uniqueBank.length, amount));
 
   return selected;
 }
@@ -891,17 +1557,16 @@ function getRandomQuestionsFromBank(amount) {
   return getRandomQuestionsAvoidingRecent(
     QUESTION_BANK,
     amount,
-    RECENT_REGULAR_QUESTIONS_KEY,
-    RECENT_REGULAR_LIMIT
+    RECENT_REGULAR_QUESTIONS_KEY
   );
 }
 
-function getRandomFastMoneyQuestionsFromBank(amount) {
+function getRandomFastMoneyQuestionsFromBank(amount, excludeIds = []) {
   return getRandomQuestionsAvoidingRecent(
     FAST_MONEY_BANK,
     amount,
     RECENT_FAST_MONEY_QUESTIONS_KEY,
-    RECENT_FAST_MONEY_LIMIT
+    { excludeIds }
   );
 }
 
@@ -2127,7 +2792,8 @@ function showFastMoneyScreen() {
 
   phase = "fast-money-intro";
 
-  fastMoneyQuestions = getRandomFastMoneyQuestionsFromBank(5);
+  const regularRoundQuestionIds = questions.map(getQuestionId);
+  fastMoneyQuestions = getRandomFastMoneyQuestionsFromBank(5, regularRoundQuestionIds);
   const leadingTeamIndex = teams[0].score >= teams[1].score ? 0 : 1;
   fastMoneyTeamOrder = [leadingTeamIndex, getOtherTeamIndex(leadingTeamIndex)];
   fastMoneyTeamIndex = fastMoneyTeamOrder[0];

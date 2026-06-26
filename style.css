@@ -1056,3 +1056,358 @@ body.game-paused #fast-start-button {
   color: #073b5c;
   text-shadow: none;
 }
+
+/* =========================================================
+   RESPONSIVE STAGE LAYOUT UPDATE
+   Keeps the game optimized for MacBook/laptop windows,
+   larger desktop monitors, and TV displays without overlap.
+   ========================================================= */
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  overflow: auto;
+}
+
+.screen {
+  min-height: 100svh;
+  padding: clamp(8px, 1.8vmin, 24px);
+}
+
+/* Let game screens use a flexible two-column stage instead of overlapping absolute panels. */
+#game-screen.active,
+#fast-money-screen.active {
+  align-items: stretch;
+}
+
+.game-layout,
+.fast-money-layout {
+  width: min(100%, 1560px);
+  min-height: calc(100svh - clamp(16px, 3.6vmin, 48px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(150px, clamp(165px, 16vw, 270px)) minmax(0, min(74vw, 940px));
+  gap: clamp(14px, 2.7vw, 64px);
+  align-items: center;
+  justify-content: center;
+  padding: clamp(8px, 1.5vmin, 20px);
+  position: relative;
+}
+
+.side-panel,
+.fast-side-header {
+  position: static;
+  transform: none;
+  left: auto;
+  top: auto;
+  width: 100%;
+  max-width: 270px;
+  justify-self: center;
+}
+
+.side-panel {
+  gap: clamp(12px, 2vh, 18px);
+}
+
+.side-logo-box,
+.side-small-box,
+.fast-side-header {
+  border-width: clamp(5px, 0.7vw, 8px);
+  border-radius: clamp(18px, 2vw, 28px);
+}
+
+.side-logo-box {
+  min-width: clamp(125px, 12vw, 170px);
+  padding: clamp(12px, 1.3vw, 18px) clamp(10px, 1.2vw, 16px);
+}
+
+.side-logo-box h1 {
+  font-size: clamp(42px, 4.5vw, 66px);
+}
+
+.side-small-box {
+  min-width: clamp(125px, 12vw, 170px);
+  padding: clamp(10px, 1.2vw, 14px) clamp(10px, 1.1vw, 12px);
+}
+
+.side-small-box p,
+#round-label,
+#phase-label {
+  font-size: clamp(17px, 1.75vw, 24px);
+}
+
+.board-area,
+.fast-board-area {
+  width: 100%;
+  max-width: 940px;
+  padding: clamp(14px, 2vmin, 24px);
+  border-width: clamp(5px, 0.7vw, 8px);
+  border-radius: clamp(20px, 2vw, 30px);
+}
+
+.scoreboard {
+  gap: clamp(8px, 1vw, 14px);
+  margin-bottom: clamp(10px, 1.8vh, 18px);
+}
+
+.score-card {
+  min-width: clamp(105px, 11vw, 145px);
+  padding: clamp(7px, 1vmin, 10px) clamp(10px, 1.2vmin, 14px);
+  border-width: clamp(3px, 0.4vw, 4px);
+}
+
+.score-card h2 {
+  font-size: clamp(15px, 1.45vw, 20px);
+}
+
+.score-card p {
+  font-size: clamp(24px, 2.4vw, 34px);
+  margin-top: clamp(4px, 0.7vh, 8px);
+}
+
+#question-text,
+#fast-question-text {
+  font-size: clamp(23px, 2.2vw, 34px);
+  line-height: 1.16;
+  margin: clamp(4px, 0.8vh, 8px) 0 clamp(12px, 2vh, 22px);
+}
+
+.answer-board {
+  gap: clamp(9px, 1.5vmin, 14px);
+}
+
+.answer-card {
+  min-height: clamp(54px, 7.1vh, 76px);
+  font-size: clamp(21px, 2vw, 28px);
+  padding: clamp(10px, 1.5vmin, 16px) clamp(14px, 2vmin, 22px);
+  border-width: clamp(3px, 0.45vw, 4px);
+}
+
+.answer-card.hidden-answer {
+  font-size: clamp(28px, 3vw, 38px);
+}
+
+.status-panel {
+  margin-top: clamp(10px, 1.8vh, 16px);
+  padding: clamp(10px, 1.5vmin, 14px);
+}
+
+#active-team-label {
+  font-size: clamp(22px, 2.1vw, 30px);
+}
+
+#game-message,
+#fast-message {
+  font-size: clamp(17px, 1.55vw, 21px);
+}
+
+.guess-row {
+  gap: clamp(7px, 1vmin, 10px);
+}
+
+#guess-input,
+#fast-answer-input {
+  width: min(64%, 560px);
+  font-size: clamp(18px, 1.7vw, 22px);
+  padding: clamp(9px, 1.3vmin, 12px);
+}
+
+.strikes {
+  min-height: clamp(42px, 6vh, 56px);
+}
+
+.strike {
+  font-size: clamp(40px, 5vw, 56px);
+}
+
+.host-controls {
+  margin-top: clamp(12px, 2vh, 18px);
+  gap: clamp(8px, 1.3vw, 12px);
+}
+
+.host-controls button,
+.volume-control {
+  font-size: clamp(14px, 1.25vw, 16px);
+  padding: clamp(8px, 1.1vmin, 10px) clamp(12px, 1.5vmin, 16px);
+  margin: clamp(4px, 0.8vmin, 8px);
+}
+
+.volume-control input {
+  width: clamp(90px, 10vw, 120px);
+  max-width: clamp(90px, 10vw, 120px);
+}
+
+.fast-side-header {
+  padding: clamp(16px, 2vw, 24px) clamp(10px, 1.5vw, 18px);
+}
+
+.fast-side-header h1 {
+  font-size: clamp(36px, 4vw, 54px);
+}
+
+.fast-side-header #fast-team-label,
+.fast-side-header #fast-player-label,
+.fast-side-header #fast-timer {
+  font-size: clamp(15px, 1.4vw, 19px);
+}
+
+.fast-row {
+  font-size: clamp(15px, 1.35vw, 18px);
+  padding: clamp(9px, 1.3vmin, 12px) clamp(12px, 1.6vmin, 18px);
+  gap: clamp(6px, 1vmin, 10px);
+}
+
+.fast-countdown {
+  font-size: clamp(72px, 9vw, 120px);
+}
+
+.intro-card,
+.setup-card {
+  width: min(100%, 820px);
+  max-height: calc(100svh - 24px);
+  overflow-y: auto;
+  padding: clamp(24px, 4vw, 50px);
+  border-width: clamp(5px, 0.7vw, 8px);
+}
+
+.intro-card h1 {
+  font-size: clamp(58px, 8vw, 96px);
+}
+
+.setup-card h1 {
+  font-size: clamp(46px, 6vw, 74px);
+}
+
+.intro-card p,
+.setup-card p {
+  font-size: clamp(22px, 3vw, 30px);
+}
+
+.menu-action-button,
+.intro-volume-control,
+.rules-dropdown summary {
+  max-width: min(640px, 100%);
+  font-size: clamp(18px, 2.1vw, 22px);
+  padding: clamp(12px, 1.6vw, 14px) clamp(16px, 2vw, 22px);
+}
+
+.rules-menu-content {
+  max-height: min(390px, 45svh);
+}
+
+/* Compact laptop windows: keep the TV-style layout, but reduce vertical pressure. */
+@media (max-height: 820px) and (min-width: 1051px) {
+  .game-layout,
+  .fast-money-layout {
+    grid-template-columns: minmax(130px, 190px) minmax(0, min(76vw, 850px));
+    gap: clamp(12px, 2vw, 34px);
+    padding: 6px;
+  }
+
+  .board-area,
+  .fast-board-area {
+    padding: 14px;
+  }
+
+  .side-logo-box h1 {
+    font-size: clamp(40px, 4vw, 54px);
+  }
+
+  .side-small-box p,
+  #round-label,
+  #phase-label {
+    font-size: clamp(16px, 1.5vw, 21px);
+  }
+
+  .answer-card {
+    min-height: clamp(48px, 6.4vh, 62px);
+  }
+
+  #question-text,
+  #fast-question-text {
+    margin-bottom: 10px;
+  }
+
+  .status-panel {
+    margin-top: 10px;
+    padding: 10px;
+  }
+
+  .host-controls {
+    margin-top: 10px;
+  }
+}
+
+/* Medium and small screens: stack the side panel above the board to avoid overlap. */
+@media (max-width: 1050px) {
+  .game-layout,
+  .fast-money-layout {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    align-items: start;
+    min-height: auto;
+  }
+
+  .side-panel {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  .fast-side-header {
+    max-width: min(100%, 680px);
+  }
+
+  .board-area,
+  .fast-board-area {
+    max-width: min(100%, 900px);
+  }
+}
+
+/* Narrow displays still work, but the board becomes one column for readability. */
+@media (max-width: 760px) {
+  .screen {
+    padding: 8px;
+  }
+
+  .answer-board {
+    grid-template-columns: 1fr;
+  }
+
+  #guess-input,
+  #fast-answer-input {
+    width: 100%;
+  }
+
+  .guess-row button {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .fast-row {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .intro-volume-control {
+    flex-wrap: wrap;
+  }
+}
+
+/* Very large TVs/projectors: allow the board to breathe without becoming oversized. */
+@media (min-width: 1700px) and (min-height: 900px) {
+  .game-layout,
+  .fast-money-layout {
+    grid-template-columns: 280px minmax(860px, 1000px);
+    gap: 80px;
+  }
+
+  .board-area,
+  .fast-board-area {
+    max-width: 1000px;
+  }
+}
